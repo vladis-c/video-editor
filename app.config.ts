@@ -6,7 +6,7 @@ export default ({config}: ConfigContext): ExpoConfig => ({
   slug: 'video-editor',
   owner: 'vladis-c',
   version: '1.0.0',
-  platforms: ['android', 'ios'],
+  platforms: ['android'],
   orientation: 'portrait',
   icon: './assets/icon.png',
   userInterfaceStyle: 'light',
@@ -45,7 +45,6 @@ export default ({config}: ConfigContext): ExpoConfig => ({
         package: 'full-gpl',
       },
     ],
-    'expo-screen-orientation',
     [
       'expo-media-library',
       {
