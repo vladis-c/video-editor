@@ -1,16 +1,16 @@
 import {createSlice} from '@reduxjs/toolkit';
-import * as FileSystem from 'expo-file-system';
 import * as ImagePicker from 'expo-image-picker';
 
 import createAppAsyncThunk from '../thunk';
 import {getFileInfoAsync, pickFromGalleryAsync} from '../../helpers/files';
+import type {MediaFile} from '../../types';
 
 type CompressSliceInitialState = {
-  file: FileSystem.FileInfo;
+  file: MediaFile;
 };
 
 const initialState: CompressSliceInitialState = {
-  file: {} as FileSystem.FileInfo,
+  file: {} as MediaFile,
 };
 
 const compressSlice = createSlice({
@@ -22,7 +22,11 @@ const compressSlice = createSlice({
     },
   },
   extraReducers: builder => {
-    builder.addCase(comressVideo.fulfilled, state => {});
+    builder.addCase(getVideo.fulfilled, (state, action) => {
+      if (action.payload) {
+        state.file = action.payload;
+      }
+    });
   },
 });
 
@@ -39,7 +43,12 @@ export const getVideo = createAppAsyncThunk('getVideo', async () => {
       // TODO: show error toast message
       return;
     }
-    console.log(fileData);
+    const finalFileData: MediaFile = {
+      ...fileFromGallery,
+      ...fileData,
+    };
+    console.log(finalFileData);
+    return finalFileData;
   } catch (error) {
     console.log('getVideo error', error);
   }
