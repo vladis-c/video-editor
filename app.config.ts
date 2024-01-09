@@ -39,12 +39,7 @@ export default ({config}: ConfigContext): ExpoConfig => ({
         },
       },
     ],
-    [
-      '@config-plugins/ffmpeg-kit-react-native',
-      {
-        package: 'full-gpl',
-      },
-    ],
+    ['@config-plugins/ffmpeg-kit-react-native', {package: 'full-gpl'}],
     [
       'expo-media-library',
       {

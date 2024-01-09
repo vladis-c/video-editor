@@ -4,6 +4,7 @@ import * as ImagePicker from 'expo-image-picker';
 import createAppAsyncThunk from '../thunk';
 import {getFileInfoAsync, pickFromGalleryAsync} from '../../helpers/files';
 import type {MediaFile} from '../../types';
+import {ffmpegCompressVideo} from '../../helpers/ffmpeg';
 
 type CompressSliceInitialState = {
   file: MediaFile;
@@ -41,6 +42,10 @@ export const getVideo = createAppAsyncThunk('getVideo', async () => {
     const fileData = await getFileInfoAsync(fileFromGallery.uri);
     if (!fileData?.exists) {
       // TODO: show error toast message
+      return;
+    }
+    const finished = await ffmpegCompressVideo(fileData.uri);
+    if (!finished) {
       return;
     }
     const finalFileData: MediaFile = {
