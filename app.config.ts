@@ -55,6 +55,13 @@ export default ({config}: ConfigContext): ExpoConfig => ({
         isAccessMediaLocationEnabled: true,
       },
     ],
+    [
+      'expo-image-picker',
+      {
+        photosPermission:
+          'Allow $(PRODUCT_NAME) to access your gallery for getting videos.',
+      },
+    ],
   ],
   extra: {
     eas: {

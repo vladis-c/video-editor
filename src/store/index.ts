@@ -6,20 +6,20 @@ import {
   Action,
 } from '@reduxjs/toolkit';
 import serviceSlice from './serviceSlice';
+import compressSlice from './video/compressSlice';
 
 const store = configureStore({
   reducer: combineReducers({
     service: serviceSlice.reducer,
+    compressVideo: compressSlice.reducer,
   }),
   middleware: getDefaultMiddleware =>
-    getDefaultMiddleware({serializableCheck: false})
-      .concat
-      // notificationsApi.middleware,
-      (),
+    getDefaultMiddleware({serializableCheck: false}).concat(),
 });
 
 export type RootState = {
   service: ReturnType<typeof serviceSlice.reducer>;
+  compressVideo: ReturnType<typeof compressSlice.reducer>;
 };
 export type AppThunk<ReturnType = void> = ThunkAction<
   ReturnType,

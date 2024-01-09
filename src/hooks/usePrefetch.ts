@@ -5,9 +5,11 @@ import {
   useFonts,
 } from '@expo-google-fonts/lato';
 import {useEffect, useState} from 'react';
+import {getMediaLibraryPermissions} from '../helpers/permissions';
 
 export const usePrefetch = () => {
   const [appIsReady, setAppIsReady] = useState(false);
+  const [permissionsGranted, setPermissionsGranted] = useState(false);
 
   const [fontsLoaded] = useFonts({
     Lato_300Light,
@@ -16,10 +18,17 @@ export const usePrefetch = () => {
   });
 
   useEffect(() => {
-    if (fontsLoaded) {
+    if (fontsLoaded && permissionsGranted) {
       setAppIsReady(true);
     }
-  }, [fontsLoaded]);
+  }, [fontsLoaded, permissionsGranted]);
+
+  useEffect(() => {
+    (async () => {
+      const res = await getMediaLibraryPermissions();
+      setPermissionsGranted(res);
+    })();
+  }, []);
 
   return {appIsReady};
 };
