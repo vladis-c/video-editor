@@ -17,13 +17,11 @@ type CompressionStatus =
 
 type CompressSliceInitialState = {
   file: MediaFile;
-  processing: boolean;
   status: CompressionStatus;
 };
 
 const initialState: CompressSliceInitialState = {
   file: {} as MediaFile,
-  processing: false,
   status: 'idle',
 };
 
@@ -37,22 +35,13 @@ const compressSlice = createSlice({
     ) => {
       state.status = action.payload;
     },
-    clearVideoCompressSlice: state => {
-      Object.assign(state, initialState);
-    },
+    clearVideoCompressSlice: () => initialState,
   },
   extraReducers: builder => {
-    builder.addCase(processVideoCompression.pending, state => {
-      state.processing = true;
-    });
     builder.addCase(processVideoCompression.fulfilled, (state, action) => {
       if (action.payload) {
         state.file = action.payload;
       }
-      state.processing = false;
-    });
-    builder.addCase(processVideoCompression.rejected, state => {
-      state.processing = false;
     });
   },
 });
@@ -68,7 +57,6 @@ export const processVideoCompression = createAppAsyncThunk(
         dispatch(compressSlice.actions.setVideoCompressionStatus('no file'));
         return;
       }
-      await wait(1000);
       dispatch(compressSlice.actions.setVideoCompressionStatus('getting info'));
       const fileData = await getFileInfoAsync(fileFromGallery.uri);
       if (!fileData?.exists) {
@@ -95,5 +83,6 @@ export const processVideoCompression = createAppAsyncThunk(
   },
 );
 
-export const {setVideoCompressionStatus} = compressSlice.actions;
+export const {setVideoCompressionStatus, clearVideoCompressSlice} =
+  compressSlice.actions;
 export default compressSlice;
