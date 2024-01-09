@@ -1,4 +1,6 @@
 import {FFmpegKit, FFmpegKitConfig, Level} from 'ffmpeg-kit-react-native';
+import {generateFileName} from './files';
+import {wait} from './utils';
 
 const checkFfmpegResult = async (ffmpegCommand: string) => {
   FFmpegKitConfig.setLogLevel(Level.AV_LOG_QUIET);
@@ -7,12 +9,12 @@ const checkFfmpegResult = async (ffmpegCommand: string) => {
     let count = 1;
     const checkStatus = async () => {
       while ((await session.getReturnCode()).isValueError()) {
-        await new Promise<void>(resolve => setTimeout(resolve, 1000));
+        await wait(1000);
         count++;
         console.log('Ffmpeg is not ready, count seconds:', count);
       }
       count++;
-      await new Promise<void>(resolve => setTimeout(resolve, 1000));
+      await wait(1000);
       console.log(
         'Ffmpeg value success is:',
         (await session.getReturnCode()).isValueSuccess(),
@@ -33,12 +35,12 @@ export const ffmpegCompressVideo = async (path: string) => {
     // Remove "file://" prefix
     const trimmedPath = path.replace('file://', '');
     // Generate a unique file name for the edited video
-    const editedVideoPath = `file:///storage/emulated/0/DCIM/sss_edited.mp4`;
+    const editedVideoPath = `file:///storage/emulated/0/DCIM/${generateFileName()}_c.mp4`;
     const ffmpegCommand = `-f mp4 -y -i ${trimmedPath} -b:v 3000k -b:a 128k -preset veryfast ${editedVideoPath}`;
     const executeFinished = await checkFfmpegResult(ffmpegCommand);
-    return executeFinished
+    return executeFinished;
   } catch (error) {
     console.log('ffmpegCompressVideo error', error);
-    return false
+    return false;
   }
 };
