@@ -3,20 +3,25 @@ import * as MediaLibrary from 'expo-media-library';
 
 export const getMediaLibraryPermissions = async () => {
   try {
-    const permissionGotten =
-      await ImagePicker.getMediaLibraryPermissionsAsync();
-    const permissionGotten2 = await MediaLibrary.requestPermissionsAsync();
-    if (permissionGotten.granted && permissionGotten2.granted) {
+    const permissionsToGet = [
+      ImagePicker.getMediaLibraryPermissionsAsync(),
+      MediaLibrary.getPermissionsAsync(),
+    ];
+    const permissionsToGetResult = await Promise.all(permissionsToGet);
+    if (permissionsToGetResult.every(x => x.granted)) {
       return true;
     }
-    const permitted = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    const permitted2 = await MediaLibrary.requestPermissionsAsync();
-    if (permitted.granted && permitted2.granted) {
+    const permissionsToRequest = [
+      ImagePicker.requestMediaLibraryPermissionsAsync(),
+      MediaLibrary.requestPermissionsAsync(),
+    ];
+    const permissionsToRequestResult = await Promise.all(permissionsToRequest);
+    if (permissionsToRequestResult.every(x => x.granted)) {
       return true;
     }
     return false;
   } catch (error) {
-    console.log('getMediaLibraryPermissions error', error);
+    console.error('getMediaLibraryPermissions error', error);
     return false;
   }
 };

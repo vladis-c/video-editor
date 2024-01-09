@@ -52,10 +52,10 @@ export const getVideo = createAppAsyncThunk('getVideo', async () => {
       ...fileFromGallery,
       ...fileData,
     };
-    console.log(finalFileData);
     return finalFileData;
   } catch (error) {
     console.log('getVideo error', error);
+    return;
   }
 });
 
