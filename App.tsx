@@ -9,7 +9,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import store from './src/store';
 import MainNavigator from './src/navigation/MainNavigator';
 import navigation from './src/navigation/navigation';
-import {NavigationTheme, PaperTheme} from './src/theme';
+import {BaseTheme, PaperTheme} from './src/theme';
 import {usePrefetch} from './src/hooks/usePrefetch';
 
 SplashScreen.preventAutoHideAsync();
@@ -36,7 +36,7 @@ const App = () => {
       <Provider store={store}>
         <PaperProvider theme={PaperTheme}>
           <NavigationContainer
-            theme={NavigationTheme}
+            theme={BaseTheme}
             ref={navigation.navigationRef}>
             <StatusBar translucent={true} />
             <MainNavigator />

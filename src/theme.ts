@@ -105,7 +105,7 @@ export const PaperTheme: ThemeProp = {
   },
 };
 
-export const NavigationTheme: Theme = {
+export const BaseTheme: Theme = {
   dark: false,
   colors: {
     ...DefaultTheme.colors,
