@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, ScrollView} from 'react-native';
 import {ActivityIndicator, Button, Text} from 'react-native-paper';
 import {useAppDispatch, useAppSelector} from '../store';
 import {
@@ -9,6 +9,7 @@ import {
 import {BaseTheme} from '../theme';
 
 const styles = StyleSheet.create({
+  scroll: {flexGrow: 1},
   container: {flex: 1, justifyContent: 'center', alignItems: 'center'},
   activity: {height: '10%', justifyContent: 'center', alignItems: 'center'},
   statusText: {
@@ -17,7 +18,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const FirstScreen = () => {
+const CompressScreen = () => {
   const dispatch = useAppDispatch();
   const {status} = useAppSelector(({compressVideo}) => compressVideo);
   const displayStatus = status !== 'idle';
@@ -26,7 +27,7 @@ const FirstScreen = () => {
   const displayCompletedButton = status === 'completed';
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.scroll} contentContainerStyle={styles.container}>
       {!displayStatus ? (
         <Button
           mode="contained"
@@ -53,8 +54,8 @@ const FirstScreen = () => {
           Start over
         </Button>
       ) : null}
-    </View>
+    </ScrollView>
   );
 };
 
-export default FirstScreen;
+export default CompressScreen;

@@ -12,7 +12,8 @@ export const MAIN_NAV = {
 export type MainNavPages = ObjectValues<typeof MAIN_NAV>;
 
 export const TABS_NAV = {
-  MAIN: 'Main tab',
+  COMPRESS: 'Compress',
+  TRIM: 'Trim',
 } as const;
 export type TabsNavPages = ObjectValues<typeof TABS_NAV>;
 
@@ -22,7 +23,8 @@ export type MainNavParamList = {
 };
 
 export type TabNavParamList = {
-  [TABS_NAV.MAIN]: undefined;
+  [TABS_NAV.COMPRESS]: undefined;
+  [TABS_NAV.TRIM]: undefined;
 };
 
 // Navigation Props as screen props
