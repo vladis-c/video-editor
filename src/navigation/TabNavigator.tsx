@@ -4,12 +4,22 @@ import {MaterialIcons, MaterialCommunityIcons} from '@expo/vector-icons';
 import {TABS_NAV, TabNavParamList} from './navigation';
 import CompressScreen from '../screens/CompressScreen';
 import TrimScreen from '../screens/TrimScreen';
+import SelectScreen from '../screens/SelectScreen';
 
 const Tab = createBottomTabNavigator<TabNavParamList>();
 
 const TabNavigator = () => {
   return (
     <Tab.Navigator>
+      <Tab.Screen
+        name={TABS_NAV.SELECT}
+        component={SelectScreen}
+        options={{
+          tabBarIcon: ({color}) => (
+            <MaterialIcons name="video-collection" size={24} color={color} />
+          ),
+        }}
+      />
       <Tab.Screen
         name={TABS_NAV.COMPRESS}
         component={CompressScreen}

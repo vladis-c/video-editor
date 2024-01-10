@@ -1,27 +1,22 @@
 import {PayloadAction, createSlice} from '@reduxjs/toolkit';
-import * as ImagePicker from 'expo-image-picker';
 
 import createAppAsyncThunk from '../thunk';
-import {getFileInfoAsync, pickFromGalleryAsync} from '../../helpers/files';
-import type {MediaFile} from '../../types';
 import {ffmpegCompressVideo} from '../../helpers/ffmpeg';
 import {wait} from '../../helpers/utils';
+import navigation, {MAIN_NAV, TABS_NAV} from '../../navigation/navigation';
 
 type CompressionStatus =
-  | 'getting info'
   | 'compressing'
   | 'completed'
-  | 'no file'
   | 'error'
-  | 'idle';
+  | 'idle'
+  | 'forwarding';
 
 type CompressSliceInitialState = {
-  file: MediaFile;
   status: CompressionStatus;
 };
 
 const initialState: CompressSliceInitialState = {
-  file: {} as MediaFile,
   status: 'idle',
 };
 
@@ -37,47 +32,43 @@ const compressSlice = createSlice({
     },
     clearVideoCompressSlice: () => initialState,
   },
-  extraReducers: builder => {
-    builder.addCase(processVideoCompression.fulfilled, (state, action) => {
-      if (action.payload) {
-        state.file = action.payload;
-      }
-    });
-  },
 });
 
 export const processVideoCompression = createAppAsyncThunk(
-  'getVideo',
-  async (_, {dispatch}) => {
+  'processVideoCompression',
+  async (_, {dispatch, getState}) => {
+    const handleNavigateToSelect = () => {
+      navigation.navigate(MAIN_NAV.TABS_NAV, {
+        screen: TABS_NAV.SELECT,
+      });
+    };
+
+    const file = getState().videoFile.file;
+    if (!file) {
+      handleNavigateToSelect();
+      return;
+    }
     try {
-      const fileFromGallery = await pickFromGalleryAsync(
-        ImagePicker.MediaTypeOptions.Videos,
-      );
-      if (!fileFromGallery) {
-        dispatch(compressSlice.actions.setVideoCompressionStatus('no file'));
-        return;
-      }
-      dispatch(compressSlice.actions.setVideoCompressionStatus('getting info'));
-      const fileData = await getFileInfoAsync(fileFromGallery.uri);
-      if (!fileData?.exists) {
-        dispatch(compressSlice.actions.setVideoCompressionStatus('no file'));
-        return;
-      }
       await wait(1000);
       dispatch(compressSlice.actions.setVideoCompressionStatus('compressing'));
-      const finished = await ffmpegCompressVideo(fileData.uri);
+      const finished = await ffmpegCompressVideo(file.uri);
       if (!finished) {
         dispatch(compressSlice.actions.setVideoCompressionStatus('error'));
+        await wait(1000);
+        handleNavigateToSelect();
         return;
       }
-      const finalFileData: MediaFile = {
-        ...fileFromGallery,
-        ...fileData,
-      };
       dispatch(compressSlice.actions.setVideoCompressionStatus('completed'));
-      return finalFileData;
+      await wait(500);
+      dispatch(compressSlice.actions.setVideoCompressionStatus('forwarding'));
+      await wait(1000);
+      navigation.navigate(MAIN_NAV.TABS_NAV, {screen: TABS_NAV.TRIM});
+      return;
     } catch (error) {
-      console.log('getVideo error', error);
+      dispatch(compressSlice.actions.setVideoCompressionStatus('error'));
+      await wait(1000);
+      handleNavigateToSelect();
+      console.log('processVideoCompression error', error);
       return;
     }
   },

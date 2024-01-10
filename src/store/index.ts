@@ -8,10 +8,12 @@ import {
 import serviceSlice from './serviceSlice';
 import compressSlice from './video/compressSlice';
 import trimSlice from './video/trimSlice';
+import videoFileSlice from './video/fileSlice';
 
 const store = configureStore({
   reducer: combineReducers({
     service: serviceSlice.reducer,
+    videoFile: videoFileSlice.reducer,
     compressVideo: compressSlice.reducer,
     trimVideo: trimSlice.reducer,
   }),
@@ -21,6 +23,7 @@ const store = configureStore({
 
 export type RootState = {
   service: ReturnType<typeof serviceSlice.reducer>;
+  videoFile: ReturnType<typeof videoFileSlice.reducer>;
   compressVideo: ReturnType<typeof compressSlice.reducer>;
   trimVideo: ReturnType<typeof trimSlice.reducer>;
 };

@@ -12,6 +12,7 @@ export const MAIN_NAV = {
 export type MainNavPages = ObjectValues<typeof MAIN_NAV>;
 
 export const TABS_NAV = {
+  SELECT: 'Select',
   COMPRESS: 'Compress',
   TRIM: 'Trim',
 } as const;
@@ -23,6 +24,7 @@ export type MainNavParamList = {
 };
 
 export type TabNavParamList = {
+  [TABS_NAV.SELECT]: undefined;
   [TABS_NAV.COMPRESS]: undefined;
   [TABS_NAV.TRIM]: undefined;
 };

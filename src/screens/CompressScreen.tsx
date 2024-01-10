@@ -1,11 +1,7 @@
 import React from 'react';
 import {View, StyleSheet, ScrollView} from 'react-native';
-import {ActivityIndicator, Button, Text} from 'react-native-paper';
-import {useAppDispatch, useAppSelector} from '../store';
-import {
-  clearVideoCompressSlice,
-  processVideoCompression,
-} from '../store/video/compressSlice';
+import {ActivityIndicator, Text} from 'react-native-paper';
+import {useAppSelector} from '../store';
 import {BaseTheme} from '../theme';
 
 const styles = StyleSheet.create({
@@ -19,41 +15,22 @@ const styles = StyleSheet.create({
 });
 
 const CompressScreen = () => {
-  const dispatch = useAppDispatch();
   const {status} = useAppSelector(({compressVideo}) => compressVideo);
-  const displayStatus = status !== 'idle';
-  const displayActivityIndicator =
-    status === 'getting info' || status === 'compressing';
-  const displayCompletedButton = status === 'completed';
+  const displayActivityIndicator = status === 'compressing';
 
   return (
     <ScrollView style={styles.scroll} contentContainerStyle={styles.container}>
-      {!displayStatus ? (
-        <Button
-          mode="contained"
-          onPress={() => dispatch(processVideoCompression())}>
-          Select video file
-        </Button>
-      ) : (
-        <View style={styles.activity}>
-          <Text variant="displayMedium" style={styles.statusText}>
-            {status}
-          </Text>
-          {displayActivityIndicator ? (
-            <ActivityIndicator
-              size={200}
-              theme={{colors: {primary: BaseTheme.colors.card}}}
-            />
-          ) : null}
-        </View>
-      )}
-      {displayCompletedButton ? (
-        <Button
-          mode="contained"
-          onPress={() => dispatch(clearVideoCompressSlice())}>
-          Start over
-        </Button>
-      ) : null}
+      <View style={styles.activity}>
+        <Text variant="displayMedium" style={styles.statusText}>
+          {status}
+        </Text>
+        {displayActivityIndicator ? (
+          <ActivityIndicator
+            size={200}
+            theme={{colors: {primary: BaseTheme.colors.card}}}
+          />
+        ) : null}
+      </View>
     </ScrollView>
   );
 };
