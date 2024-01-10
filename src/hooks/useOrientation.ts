@@ -1,12 +1,12 @@
 import * as ScreenOrientation from 'expo-screen-orientation';
-import {useEffect, useState} from 'react';
+import {useEffect} from 'react';
 import {Dimensions} from 'react-native';
 import {useAppDispatch, useAppSelector} from '../store';
 import {setDeviceOrientationValues} from '../store/serviceSlice';
 
 const {width: WIDTH, height: HEIGHT} = Dimensions.get('screen');
 
-export const useOrientation = (extra: number = 0) => {
+export const useOrientation = (extra = 0) => {
   const dispatch = useAppDispatch();
   const {orientation} = useAppSelector(({service}) => service);
 
@@ -51,7 +51,6 @@ export const useOrientation = (extra: number = 0) => {
     return () => {
       ScreenOrientation.removeOrientationChangeListener(sub);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return {
     screenWidth: orientation.width,

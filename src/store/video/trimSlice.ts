@@ -33,7 +33,7 @@ const trimSlice = createSlice({
     },
     clearVideoTrimSlice: () => initialState,
   },
-  extraReducers: builder => {},
+  // extraReducers: builder => {},
 });
 
 export const {
