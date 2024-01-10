@@ -46,7 +46,6 @@ const TrimScreen = () => {
         // }}
         shouldPlay={false}
         useNativeControls={true}
-        posterSource={require('../../assets/no_thumbnail.png')}
         resizeMode={ResizeMode.CONTAIN}
         isLooping={false}
         onPlaybackStatusUpdate={status => {

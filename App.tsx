@@ -1,5 +1,6 @@
 import React, {useCallback} from 'react';
 import {Provider} from 'react-redux';
+import {LogBox} from 'react-native';
 import {StatusBar} from 'expo-status-bar';
 import {NavigationContainer} from '@react-navigation/native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
@@ -11,6 +12,8 @@ import MainNavigator from './src/navigation/MainNavigator';
 import navigation from './src/navigation/navigation';
 import {BaseTheme, PaperTheme} from './src/theme';
 import {usePrefetch} from './src/hooks/usePrefetch';
+
+LogBox.ignoreLogs(['`new NativeEventEmitter()`']);
 
 SplashScreen.preventAutoHideAsync();
 
@@ -35,9 +38,7 @@ const App = () => {
     <SafeAreaProvider onLayout={hideSplashScreen}>
       <Provider store={store}>
         <PaperProvider theme={PaperTheme}>
-          <NavigationContainer
-            theme={BaseTheme}
-            ref={navigation.navigationRef}>
+          <NavigationContainer theme={BaseTheme} ref={navigation.navigationRef}>
             <StatusBar translucent={true} />
             <MainNavigator />
           </NavigationContainer>

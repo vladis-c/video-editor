@@ -1,32 +1,31 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import * as ScreenOrientation from 'expo-screen-orientation';
 
+type OrientationService = {
+  current: ScreenOrientation.Orientation;
+  change: number;
+  width: number;
+};
 type ServiceSliceInitialState = {
-  network: boolean;
-  appId: string;
-  deviceId: string;
+  orientation: OrientationService;
 };
 
 const initialState: ServiceSliceInitialState = {
-  network: false,
-  appId: '',
-  deviceId: '',
+  orientation: {} as OrientationService,
 };
 
 const serviceSlice = createSlice({
   name: 'serviceSlice',
   initialState,
   reducers: {
-    setNetwork: (state, action: PayloadAction<boolean>) => {
-      state.network = action.payload;
-    },
-    setAppId: (state, action: PayloadAction<string>) => {
-      state.appId = action.payload;
-    },
-    setDeviceId: (state, action: PayloadAction<string>) => {
-      state.deviceId = action.payload;
+    setDeviceOrientationValues: (
+      state,
+      action: PayloadAction<Partial<OrientationService>>,
+    ) => {
+      state.orientation = {...state.orientation, ...action.payload};
     },
   },
 });
 
-export const {setNetwork, setAppId, setDeviceId} = serviceSlice.actions;
+export const {setDeviceOrientationValues} = serviceSlice.actions;
 export default serviceSlice;

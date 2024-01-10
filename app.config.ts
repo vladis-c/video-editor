@@ -57,6 +57,12 @@ export default ({config}: ConfigContext): ExpoConfig => ({
           'Allow $(PRODUCT_NAME) to access your gallery for getting videos.',
       },
     ],
+    [
+      'expo-screen-orientation',
+      {
+        initialOrientation: 'DEFAULT',
+      },
+    ],
   ],
   extra: {
     eas: {
