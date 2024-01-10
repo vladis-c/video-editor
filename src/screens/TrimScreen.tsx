@@ -36,7 +36,7 @@ const TrimScreen = () => {
 
   return (
     <ScrollView style={styles.scroll} contentContainerStyle={styles.container}>
-      <Video
+      {/* <Video
         style={styles.video}
         // source={{
         //   uri: videoUri,
@@ -74,7 +74,7 @@ const TrimScreen = () => {
             />
           </View>
         )}
-      </Video>
+      </Video> */}
       <Trimmer
         duration={values.duration}
         start={values.start}

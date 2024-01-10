@@ -1,5 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {View, PanResponder, Animated, StyleSheet, Text} from 'react-native';
+import {View, PanResponder, Animated, StyleSheet} from 'react-native';
+import {Text} from 'react-native-paper';
 import {useOrientation} from '../hooks/useOrientation';
 import {getFormattedTime, roundToThousands} from '../helpers/utils';
 import {BaseTheme} from '../theme';
@@ -124,8 +125,8 @@ const Trimmer = ({
   currentPlayback = 1000,
 }: TrimmerProps) => {
   const totalTime = useRef<number>(duration).current;
-  const [trimStart, setTrimStart] = useState(start);
-  const [trimEnd, setTrimEnd] = useState(finish);
+  const [trimStart, setTrimStart] = useState(start ?? 0);
+  const [trimEnd, setTrimEnd] = useState(finish ?? duration ?? 0);
   const [startTime, setStartTime] = useState(start);
   const [endTime, setEndTime] = useState(finish);
   const {screenWidth} = useOrientation(PADDING * 2);
@@ -133,6 +134,9 @@ const Trimmer = ({
 
   //This effect triggers setting the same position of thumbs on the screen relatively when screen width changes
   useEffect(() => {
+    if (!totalTime) {
+      return;
+    }
     const newTrimStart = (startTime * screenWidth) / totalTime;
     setTrimStart(newTrimStart);
     const newTrimEnd =
@@ -237,6 +241,10 @@ const Trimmer = ({
       setEndTime(fromEnd);
     },
   });
+
+  if (!screenWidth || !totalTime) {
+    return null;
+  }
 
   return (
     <View style={styles.bg}>
